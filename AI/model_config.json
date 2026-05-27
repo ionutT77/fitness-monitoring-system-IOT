@@ -1,0 +1,66 @@
+{
+  "feature_columns": [
+    "duration_mins",
+    "avg_hr",
+    "max_hr",
+    "hr_spikes",
+    "pct_time_low",
+    "avg_emg",
+    "emg_fatigue",
+    "total_reps"
+  ],
+  "target_column": "effectiveness_label",
+  "label_names": {
+    "0": "Low",
+    "1": "Moderate",
+    "2": "High",
+    "3": "Maximum"
+  },
+  "best_params": {
+    "colsample_bytree": 0.722213395520227,
+    "gamma": 0.10753971856328177,
+    "learning_rate": 0.06128464607178502,
+    "max_depth": 10,
+    "min_child_weight": 1,
+    "n_estimators": 427,
+    "reg_alpha": 0.2247253370691017,
+    "reg_lambda": 0.643115174735617,
+    "subsample": 0.8112454756594799
+  },
+  "test_accuracy": 0.99875,
+  "test_f1_macro": 0.9987499973958267,
+  "feature_descriptions": {
+    "duration_mins": {
+      "positive": "long session duration ({:.0f} min)",
+      "negative": "short session duration ({:.0f} min)"
+    },
+    "avg_hr": {
+      "positive": "elevated average heart rate ({:.0f} BPM)",
+      "negative": "low average heart rate ({:.0f} BPM)"
+    },
+    "max_hr": {
+      "positive": "high peak heart rate ({:.0f} BPM)",
+      "negative": "low peak heart rate ({:.0f} BPM)"
+    },
+    "hr_spikes": {
+      "positive": "frequent HR spikes ({})",
+      "negative": "few HR spikes ({})"
+    },
+    "pct_time_low": {
+      "positive": "significant time in low HR zone ({:.1f}%)",
+      "negative": "minimal time in low HR zone ({:.1f}%)"
+    },
+    "avg_emg": {
+      "positive": "strong muscle engagement (EMG: {:.0f})",
+      "negative": "weak muscle engagement (EMG: {:.0f})"
+    },
+    "emg_fatigue": {
+      "positive": "significant muscle fatigue ({:.1f}%)",
+      "negative": "minimal muscle fatigue ({:.1f}%)"
+    },
+    "total_reps": {
+      "positive": "high rep count ({})",
+      "negative": "low rep count ({})"
+    }
+  }
+}

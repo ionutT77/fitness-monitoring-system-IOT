@@ -17,18 +17,18 @@
     "3": "Maximum"
   },
   "best_params": {
-    "colsample_bytree": 0.722213395520227,
-    "gamma": 0.10753971856328177,
-    "learning_rate": 0.06128464607178502,
-    "max_depth": 10,
+    "colsample_bytree": 0.5438257335919587,
+    "gamma": 0.15080370696865844,
+    "learning_rate": 0.04389926283749712,
+    "max_depth": 8,
     "min_child_weight": 1,
-    "n_estimators": 427,
-    "reg_alpha": 0.2247253370691017,
-    "reg_lambda": 0.643115174735617,
-    "subsample": 0.8112454756594799
+    "n_estimators": 484,
+    "reg_alpha": 0.11978094533348621,
+    "reg_lambda": 0.7173423081368346,
+    "subsample": 0.8468358280832688
   },
-  "test_accuracy": 0.99875,
-  "test_f1_macro": 0.9987499973958267,
+  "test_accuracy": 0.9975,
+  "test_f1_macro": 0.9975010327090096,
   "feature_descriptions": {
     "duration_mins": {
       "positive": "long session duration ({:.0f} min)",

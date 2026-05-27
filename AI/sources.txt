@@ -1,0 +1,43 @@
+Sources from where i get inspired:
+
+https://www.verywellhealth.com/body-types-11735067#toc-1-ectomorph - i got inspired about the type of body we have
+because different type of body can enhace our heart-rate for example.
+
+What Actually Drives the Heart Rate Metrics
+Metrics like avg_hr (average heart rate), max_hr (maximum heart rate), hr_spikes, and pct_time_low (percentage of time in a low heart rate zone) are governed by your cardiovascular system and autonomic nervous system, not your body type.
+
+Max HR: This is primarily determined by genetics and age. It does not fluctuate based on body composition or fitness level.
+
+Average HR and HR Spikes: These are dictated by your cardiovascular fitness (specifically, stroke volume—how much blood your heart pumps per beat) and your effort level. A highly trained endurance athlete will have a lower avg_hr and fewer hr_spikes during a set workload than an untrained person, regardless of whether they look like an "ectomorph" or an "endomorph."
+
+Recovery (pct_time_low): How quickly your heart rate drops back into a low zone after a spike is a direct measure of aerobic conditioning and parasympathetic nervous system function.
+
+What Actually Drives the Muscular Metrics
+Metrics like avg_emg (muscle activation), emg_fatigue (neuromuscular fatigue), and total_reps are governed by your central nervous system and muscle fiber composition.
+
+Muscle Fiber Typing: Humans have a mix of Type I (slow-twitch, fatigue-resistant) and Type II (fast-twitch, powerful but fatigue quickly) muscle fibers. Someone with a high percentage of Type II fibers will generate higher initial avg_emg readings and higher power output, but their emg_fatigue will rise rapidly, reducing their total_reps in a high-intensity set.
+
+Neuromuscular Efficiency: A trained weightlifter's brain is better at recruiting motor units simultaneously. This leads to higher avg_emg signals compared to a beginner, whose nervous system cannot yet activate as much of the muscle at once.
+
+Leverages and Biomechanics: This is the one area where physical shape matters, but in terms of bone length, not "somatotype." Someone with long arms has to move the weight further during a bench press, doing more mechanical work per rep, which can induce earlier emg_fatigue and lower total_reps compared to someone with shorter arms lifting the same weight.
+
+I think every feature is important and should be important for this specific model: for example avg_ht is more important , than max_hr(because you can for example hit a peak hr in a single set, and then not training effectively anymore), hr_spikes(actually shows how many sets you did, because the brake between sets will set you heartrate lower(depending on the individual) and you ll have spikes everytime you start a set again)
+
+Based on those ideas, i thought about addding manual features like for example : 
+
+AGE: Max HR: This is primarily determined by genetics and age. It does not fluctuate based on body composition or fitness level.
+
+Type of athlete: powerlifter, hybrid athlete , non-athletic person, only-gym type of person, 
+
+fitness level: low,medium,high - this comes with the type of athlete
+
+"Average HR and HR Spikes: These are dictated by your cardiovascular fitness (specifically, stroke volume—how much blood your heart pumps per beat) and your effort level. A highly trained endurance athlete will have a lower avg_hr and fewer hr_spikes during a set workload than an untrained person"
+
+
+approximation_of_bodyfat: Higher bodyfat(higher HeartRate)
+
+Recovery (pct_time_low): How quickly your heart rate drops back into a low zone after a spike is a direct measure of aerobic conditioning
+
+Also : "Neuromuscular Efficiency: A trained weightlifter's brain is better at recruiting motor units simultaneously. This leads to higher avg_emg signals compared to a beginner, whose nervous system cannot yet activate as much of the muscle at once."
+
+Also based on this : "Leverages and Biomechanics: This is the one area where physical shape matters, but in terms of bone length, not "somatotype." Someone with long arms has to move the weight further during a bench press, doing more mechanical work per rep, which can induce earlier emg_fatigue and lower total_reps compared to someone with shorter arms lifting the same weight."  - based on their length(their arms or legs are longer)

@@ -156,7 +156,7 @@ param_distributions = {
     'learning_rate':    uniform(0.03, 0.27),     # 0.03 to 0.30
     'min_child_weight': randint(1, 7),
     'subsample':        uniform(0.7, 0.3),       # 0.7 to 1.0
-    'colsample_bytree': uniform(0.7, 0.3),       # 0.7 to 1.0
+    'colsample_bytree': uniform(0.3, 0.4),       # 0.3 to 0.7
     'gamma':            uniform(0, 0.3),          # 0 to 0.3
     'reg_alpha':        uniform(0, 0.5),          # L1 regularization
     'reg_lambda':       uniform(0.5, 1.5),        # L2 regularization

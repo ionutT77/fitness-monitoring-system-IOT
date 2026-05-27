@@ -68,7 +68,7 @@ PROFILES = {
             # Ultra-short burst: extreme intensity, way too short.
             # Even max effort can't save a 2-12 minute "workout".
             'name': 'ultra_short_burst',
-            'count': 500,
+            'count': 400,
             'duration_mins':  (2, 12),
             'avg_hr':         (120, 175),
             'max_hr_delta':   (15, 35),
@@ -82,7 +82,7 @@ PROFILES = {
             # Phone scrolling: 40-90 min at the gym but barely lifting.
             # Time alone does not equal effectiveness.
             'name': 'phone_scrolling',
-            'count': 450,
+            'count': 400,
             'duration_mins':  (40, 90),
             'avg_hr':         (65, 92),
             'max_hr_delta':   (8, 22),
@@ -96,7 +96,7 @@ PROFILES = {
             # Short and lazy: low duration AND low effort.
             # Did one or two easy sets and bounced.
             'name': 'short_lazy',
-            'count': 400,
+            'count': 350,
             'duration_mins':  (5, 18),
             'avg_hr':         (72, 105),
             'max_hr_delta':   (8, 20),
@@ -110,7 +110,7 @@ PROFILES = {
             # Medium duration, halfhearted: 20-35 min but barely engaging
             # muscles. Going through the motions with zero push.
             'name': 'medium_halfhearted',
-            'count': 400,
+            'count': 350,
             'duration_mins':  (20, 38),
             'avg_hr':         (70, 98),
             'max_hr_delta':   (8, 20),
@@ -139,7 +139,7 @@ PROFILES = {
             # Distracted gym: shows up for 25-50 min but is constantly
             # resting, chatting, inconsistent. Sporadic effort bursts.
             'name': 'distracted_gym',
-            'count': 450,
+            'count': 400,
             'duration_mins':  (25, 55),
             'avg_hr':         (75, 100),
             'max_hr_delta':   (10, 28),
@@ -150,10 +150,24 @@ PROFILES = {
             'total_reps':     (20, 65),
         },
         {
+            # Fidgeting/light movement: extremely high reps but zero intensity.
+            # Simulates restless leg, playing around, etc.
+            'name': 'fidgeting_high_reps',
+            'count': 350,
+            'duration_mins':  (20, 90),
+            'avg_hr':         (65, 85),
+            'max_hr_delta':   (5, 15),
+            'hr_spikes':      (0, 1),
+            'pct_time_low':   (80, 95),
+            'avg_emg':        (30, 80),
+            'emg_fatigue':    (0, 2),
+            'total_reps':     (100, 250),
+        },
+        {
             # Warmup-only: light movement for 3-12 min, stretching,
             # foam rolling, a few bodyweight reps. Never gets going.
             'name': 'warmup_only',
-            'count': 450,
+            'count': 400,
             'duration_mins':  (3, 14),
             'avg_hr':         (70, 100),
             'max_hr_delta':   (5, 18),
@@ -368,7 +382,7 @@ PROFILES = {
             # Beast mode: everything near physiological ceiling.
             # Long session, extreme HR, extreme EMG, extreme volume.
             'name': 'beast_mode',
-            'count': 550,
+            'count': 500,
             'duration_mins':  (42, 72),
             'avg_hr':         (148, 178),
             'max_hr_delta':   (18, 38),
@@ -379,10 +393,23 @@ PROFILES = {
             'total_reps':     (150, 270),
         },
         {
+            # One Rep Max testing: taking huge rests, doing a couple of massive singles.
+            'name': 'one_rep_max_testing',
+            'count': 400,
+            'duration_mins':  (40, 90),
+            'avg_hr':         (90, 115),
+            'max_hr_delta':   (25, 45),
+            'hr_spikes':      (2, 6),
+            'pct_time_low':   (40, 75),
+            'avg_emg':        (700, 950),
+            'emg_fatigue':    (10, 30),
+            'total_reps':     (3, 12),
+        },
+        {
             # Heavy powerlifting: low HR (3-5 min rests) but extreme
             # muscle engagement. Deadlifts, squats, bench at near-max.
             'name': 'powerlifting',
-            'count': 450,
+            'count': 400,
             'duration_mins':  (35, 62),
             'avg_hr':         (78, 105),
             'max_hr_delta':   (15, 38),
@@ -390,13 +417,13 @@ PROFILES = {
             'pct_time_low':   (48, 80),
             'avg_emg':        (530, 740),
             'emg_fatigue':    (20, 42),
-            'total_reps':     (30, 80),
+            'total_reps':     (5, 25),
         },
         {
             # High-rep endurance: lighter weight, extreme volume.
             # The sustained muscular effort makes this Maximum.
             'name': 'endurance_volume',
-            'count': 450,
+            'count': 400,
             'duration_mins':  (33, 58),
             'avg_hr':         (130, 165),
             'max_hr_delta':   (15, 30),
@@ -410,7 +437,7 @@ PROFILES = {
             # Intense circuit: supersets and giant sets with minimal
             # rest. Everything elevated throughout.
             'name': 'intense_circuit',
-            'count': 400,
+            'count': 350,
             'duration_mins':  (32, 52),
             'avg_hr':         (140, 172),
             'max_hr_delta':   (18, 35),
@@ -424,7 +451,7 @@ PROFILES = {
             # Drop sets to failure: 35-55 min where multiple sets go
             # to absolute muscular failure. Extreme fatigue signature.
             'name': 'drop_sets_failure',
-            'count': 400,
+            'count': 300,
             'duration_mins':  (35, 55),
             'avg_hr':         (135, 165),
             'max_hr_delta':   (18, 35),
@@ -438,7 +465,7 @@ PROFILES = {
             # Full body destroyer: 45-68 min, high volume across all
             # major muscle groups. Both volume AND intensity are high.
             'name': 'full_body_destroyer',
-            'count': 400,
+            'count': 300,
             'duration_mins':  (45, 68),
             'avg_hr':         (142, 172),
             'max_hr_delta':   (18, 36),

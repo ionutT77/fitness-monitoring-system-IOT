@@ -16,7 +16,7 @@ LABEL_NAMES = {int(k): v for k, v in config['label_names'].items()}
 FEATURE_DESCRIPTIONS = config['feature_descriptions']
 
 # 2. Load the trained XGBoost model
-model = xgb.XGBClassifier()
+model = xgb.XGBClassifier(enable_categorical=True)
 model.load_model('workout_model.json')
 
 # 3. Initialize the SHAP explainer (using our robust monkeypatch for XGBoost 2.1+)
@@ -52,6 +52,11 @@ def explain_prediction(model_obj, explainer_obj, sample, top_k=3):
     """Generates the prediction and a natural language explanation."""
     sample_df = pd.DataFrame([sample], columns=FEATURE_COLS)
 
+    categorical_cols = ['fitness_level', 'workout_type', 'athlete_type', 'limb_length']
+    for col in categorical_cols:
+        if col in sample_df.columns:
+            sample_df[col] = sample_df[col].astype('category')
+
     pred_label = int(model_obj.predict(sample_df)[0])
     pred_proba = model_obj.predict_proba(sample_df)[0]
     confidence = float(pred_proba[pred_label])
@@ -86,7 +91,15 @@ def explain_prediction(model_obj, explainer_obj, sample, top_k=3):
                 return f"{text} ({feat_val:.0f} BPM)"
             else:
                 return f"{text} ({feat_val:.0f})"
-        return f"{feat_name} ({feat_val:.1f})"
+        
+        # Categorical handling
+        if feat_name in ['fitness_level', 'workout_type', 'athlete_type', 'limb_length']:
+            return f"{feat_name.replace('_', ' ')} ({feat_val})"
+            
+        try:
+            return f"{feat_name} ({float(feat_val):.1f})"
+        except ValueError:
+            return f"{feat_name} ({feat_val})"
 
     top_factors = []
     for feat_name, shap_val, feat_val in feat_shap[:top_k]:
@@ -111,8 +124,18 @@ if __name__ == "__main__":
         user_input = input(f"{prompt} [Default: {default_val}]: ").strip()
         return float(user_input) if user_input else default_val
 
+    def get_str_input(prompt, default_val):
+        user_input = input(f"{prompt} [Default: {default_val}]: ").strip()
+        return user_input if user_input else default_val
+
     # Prompt the user for their custom data
     my_workout = {
+        'age':           get_input("Age (years)", 30.0),
+        'fitness_level': get_str_input("Fitness Level (low/medium/high)", "medium"),
+        'workout_type':  get_str_input("Workout Type (HILV/LIHV/hypertrophy/endurance_lifting)", "hypertrophy"),
+        'athlete_type':  get_str_input("Athlete Type (powerlifter/hybrid/gym_bro/non_athletic)", "gym_bro"),
+        'body_fat_pct':  get_input("Body Fat %", 15.0),
+        'limb_length':   get_str_input("Limb Length (short/medium/long)", "medium"),
         'duration_mins': get_input("Duration (minutes)", 45.0),
         'avg_hr':        get_input("Average Heart Rate (BPM)", 135.0),
         'max_hr':        get_input("Max Heart Rate (BPM)", 165.0),

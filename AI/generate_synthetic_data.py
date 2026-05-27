@@ -563,6 +563,7 @@ def generate_samples(n, profile, label):
         athlete_type = np.random.choice(['powerlifter', 'hybrid', 'gym_bro', 'non_athletic'], p=[0.1, 0.2, 0.5, 0.2])
         body_fat_pct = round(np.random.uniform(5.0, 35.0), 1)
         limb_length = np.random.choice(['short', 'medium', 'long'], p=[0.25, 0.5, 0.25])
+        workout_type = np.random.choice(['HILV', 'LIHV', 'hypertrophy', 'endurance_lifting'], p=[0.2, 0.2, 0.4, 0.2])
 
         # 2. Base Profile Generation
         avg_hr = np.random.uniform(*profile['avg_hr'])
@@ -575,13 +576,27 @@ def generate_samples(n, profile, label):
 
         # 3. Apply Physiological Modifiers based on user research
 
-        # Neuromuscular Efficiency & Stroke Volume
+        # Workout Type Modifiers (CRITICAL)
+        if workout_type == 'HILV':
+            total_reps = max(1, int(total_reps * 0.25))  # Slash reps
+            avg_emg *= 1.5                               # Boost EMG
+            hr_spikes += 2                               # More rests
+        elif workout_type == 'LIHV':
+            total_reps = int(total_reps * 1.5)           # Increase reps
+            avg_emg *= 0.7                               # Lower EMG
+        elif workout_type == 'endurance_lifting':
+            total_reps = int(total_reps * 2.0)           # Massive reps
+            avg_emg *= 0.6                               # Very low peak EMG
+            avg_hr *= 1.25                               # Huge HR penalty
+            emg_fatigue *= 0.7                           # Slow-twitch fibers don't fatigue fast
+
+        # Neuromuscular Efficiency & Stroke Volume (Boosted to 20-30%)
         if fitness_level == 'high':
-            avg_hr *= 0.90     # Lower HR for same work due to stroke volume
-            avg_emg *= 1.15    # Better motor unit recruitment
+            avg_hr *= 0.80     # Lower HR for same work due to stroke volume
+            avg_emg *= 1.25    # Better motor unit recruitment
         elif fitness_level == 'low':
-            avg_hr *= 1.10
-            avg_emg *= 0.85
+            avg_hr *= 1.20
+            avg_emg *= 0.75
 
         # Body Fat Penalty
         if body_fat_pct > 15.0:
@@ -606,6 +621,7 @@ def generate_samples(n, profile, label):
             'workout_id':          f"w_{uuid.uuid4().hex[:8]}",
             'age':                 age,
             'fitness_level':       fitness_level,
+            'workout_type':        workout_type,
             'athlete_type':        athlete_type,
             'body_fat_pct':        body_fat_pct,
             'limb_length':         limb_length,
@@ -672,7 +688,7 @@ def generate_dataset():
     # Build DataFrame with correct column order
     df = pd.DataFrame(all_samples)
     col_order = [
-        'workout_id', 'age', 'fitness_level', 'athlete_type', 'body_fat_pct', 'limb_length',
+        'workout_id', 'age', 'fitness_level', 'workout_type', 'athlete_type', 'body_fat_pct', 'limb_length',
         'duration_mins', 'avg_hr', 'max_hr', 'hr_spikes',
         'pct_time_low', 'avg_emg', 'emg_fatigue', 'total_reps',
         'effectiveness_label'

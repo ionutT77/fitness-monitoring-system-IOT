@@ -18,7 +18,16 @@ Before a single drop of sweat falls, the model needs to know *who* is working ou
 
 ### Athlete Type (`powerlifter`, `hybrid`, `gym_bro`, `non_athletic`)
 *   **What it affects:** Rests, HR Spikes, Rep Volume.
-*   **Why we use it:** A powerlifter doing heavy singles will take 5-minute rests. Their `avg_hr` will be low, and their `total_reps` will be minimal, but their `avg_emg` will be extreme. A "hybrid" athlete might do a CrossFit WOD with massive `total_reps` and `hr_spikes`. This category provides the AI with behavioral context so it doesn't mistakenly classify powerlifting as "Low Effectiveness."
+*   **Why we use it:** A powerlifter doing heavy singles will naturally take 5-minute rests. Their `avg_hr` will be low, and their `total_reps` will be minimal, but their `avg_emg` will be extreme. This category provides the AI with behavioral context so it doesn't mistakenly classify powerlifting as "Low Effectiveness" just because the heart rate was low.
+
+### Workout Type (`HILV`, `LIHV`, `hypertrophy`, `endurance_lifting`)
+*   **What it affects:** Expected Volume, Target Heart Rate, and EMG Expectations.
+*   **Why we use it:** 5 hard reps are better than 20 lazy reps. Volume does not necessarily equal intensity. By telling the AI the *intent* of the resistance training session, it stops blindly correlating `total_reps` with effectiveness. 
+    *   **HILV (High Intensity, Low Volume):** e.g., Powerlifting or 1-3 rep maxes. The AI will expect very few reps and long rests, but demands extreme `avg_emg`.
+    *   **LIHV (Low Intensity, High Volume):** e.g., Light pump work or rehab. The AI expects high reps, but knows the EMG will be lower.
+    *   **Hypertrophy:** Standard bodybuilding (8-12 reps). Expects moderate spikes and high fatigue.
+    *   **Endurance Lifting:** e.g., CrossFit-style barbell cycling. Expects massive reps and high heart rate, but lower peak EMG.
+*(Note: We restrict this model strictly to resistance training, ignoring pure cardio like running/rowing).*
 
 ### Body Fat Percentage
 *   **What it affects:** Cardiovascular load (`avg_hr`).
@@ -62,4 +71,4 @@ These metrics evaluate central nervous system output and muscle fiber recruitmen
 *   **Why we use it:** Measures how much your muscle activation amplitude dropped from the beginning of the workout to the end. Fast-twitch (Type II) muscle fibers are powerful but fatigue quickly. A high `emg_fatigue` proves that you pushed your fast-twitch fibers to their limit and achieved real muscular overload.
 
 ### Total Reps (`total_reps`)
-*   **Why we use it:** A measure of total volume. However, because it is now combined with `athlete_type` and `limb_length`, the model is smart enough to know that a Powerlifter doing 10 reps might be achieving the same "Maximum Effectiveness" as an Endurance athlete doing 200 reps.
+*   **Why we use it:** A measure of total volume. However, because it is now combined with `workout_type`, `athlete_type`, and `limb_length`, the model is smart enough to know that a Powerlifter doing 10 reps might be achieving the same "Maximum Effectiveness" as an Endurance athlete doing 200 reps. We specifically suppress the AI's reliance on this feature so that 5 max-effort reps are correctly graded higher than 20 lazy reps.

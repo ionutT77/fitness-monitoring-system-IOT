@@ -550,33 +550,84 @@ def enforce_physical_constraints(sample):
 def generate_samples(n, profile, label):
     """
     Generate `n` samples from a sub-profile definition.
-
-    Each feature is sampled uniformly within the profile's (min, max) range,
-    then physical constraints are enforced for realism.
     """
     samples = []
 
+    # Let's multiply n to scale up the dataset safely (e.g. 2.5x)
+    n = int(n * 2.5)
+
     for _ in range(n):
+        # 1. Generate Demographics
+        age = np.random.randint(16, 66)
+        fitness_level = np.random.choice(['low', 'medium', 'high'], p=[0.3, 0.5, 0.2])
+        athlete_type = np.random.choice(['powerlifter', 'hybrid', 'gym_bro', 'non_athletic'], p=[0.1, 0.2, 0.5, 0.2])
+        body_fat_pct = round(np.random.uniform(5.0, 35.0), 1)
+        limb_length = np.random.choice(['short', 'medium', 'long'], p=[0.25, 0.5, 0.25])
+
+        # 2. Base Profile Generation
         avg_hr = np.random.uniform(*profile['avg_hr'])
         max_hr_delta = np.random.uniform(*profile['max_hr_delta'])
+        avg_emg = np.random.uniform(*profile['avg_emg'])
+        emg_fatigue = np.random.uniform(*profile['emg_fatigue'])
+        total_reps = int(np.random.uniform(*profile['total_reps']))
+        hr_spikes = int(np.random.randint(profile['hr_spikes'][0], profile['hr_spikes'][1] + 1))
+        duration_mins = np.random.uniform(*profile['duration_mins'])
 
+        # 3. Apply Physiological Modifiers based on user research
+
+        # Neuromuscular Efficiency & Stroke Volume
+        if fitness_level == 'high':
+            avg_hr *= 0.90     # Lower HR for same work due to stroke volume
+            avg_emg *= 1.15    # Better motor unit recruitment
+        elif fitness_level == 'low':
+            avg_hr *= 1.10
+            avg_emg *= 0.85
+
+        # Body Fat Penalty
+        if body_fat_pct > 15.0:
+            extra_fat = body_fat_pct - 15.0
+            # +1% HR for every 2% body fat over 15%
+            avg_hr *= (1 + (extra_fat / 200.0))
+
+        # Leverages (Limb Length)
+        if limb_length == 'long':
+            emg_fatigue *= 1.15  # More mechanical work
+            total_reps = max(1, int(total_reps * 0.9))
+        elif limb_length == 'short':
+            emg_fatigue *= 0.85
+            total_reps = int(total_reps * 1.1)
+
+        # Athlete Type Context
+        if athlete_type == 'powerlifter':
+            hr_spikes = max(0, hr_spikes - 2) # Taking longer rests = fewer spikes
+
+        # 4. Construct Sample
         sample = {
             'workout_id':          f"w_{uuid.uuid4().hex[:8]}",
-            'duration_mins':       np.random.uniform(*profile['duration_mins']),
+            'age':                 age,
+            'fitness_level':       fitness_level,
+            'athlete_type':        athlete_type,
+            'body_fat_pct':        body_fat_pct,
+            'limb_length':         limb_length,
+            'duration_mins':       duration_mins,
             'avg_hr':              avg_hr,
             'max_hr':              avg_hr + max_hr_delta,
-            'hr_spikes':           int(np.random.randint(
-                                       profile['hr_spikes'][0],
-                                       profile['hr_spikes'][1] + 1)),
+            'hr_spikes':           hr_spikes,
             'pct_time_low':        np.random.uniform(*profile['pct_time_low']),
-            'avg_emg':             np.random.uniform(*profile['avg_emg']),
-            'emg_fatigue':         np.random.uniform(*profile['emg_fatigue']),
-            'total_reps':          int(np.random.uniform(*profile['total_reps'])),
+            'avg_emg':             avg_emg,
+            'emg_fatigue':         emg_fatigue,
+            'total_reps':          total_reps,
             'effectiveness_label': label,
         }
 
         # Apply physical constraints
         sample = enforce_physical_constraints(sample)
+
+        # Enforce Age-based Max HR
+        age_cap = 220 - age
+        sample['max_hr'] = min(sample['max_hr'], age_cap)
+        # Ensure avg_hr doesn't exceed the new capped max_hr
+        sample['avg_hr'] = min(sample['avg_hr'], sample['max_hr'] - 2)
 
         # Round for cleanliness
         sample['duration_mins'] = round(sample['duration_mins'], 1)
@@ -621,7 +672,8 @@ def generate_dataset():
     # Build DataFrame with correct column order
     df = pd.DataFrame(all_samples)
     col_order = [
-        'workout_id', 'duration_mins', 'avg_hr', 'max_hr', 'hr_spikes',
+        'workout_id', 'age', 'fitness_level', 'athlete_type', 'body_fat_pct', 'limb_length',
+        'duration_mins', 'avg_hr', 'max_hr', 'hr_spikes',
         'pct_time_low', 'avg_emg', 'emg_fatigue', 'total_reps',
         'effectiveness_label'
     ]

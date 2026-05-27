@@ -1,5 +1,10 @@
 {
   "feature_columns": [
+    "age",
+    "fitness_level",
+    "athlete_type",
+    "body_fat_pct",
+    "limb_length",
     "duration_mins",
     "avg_hr",
     "max_hr",
@@ -17,19 +22,39 @@
     "3": "Maximum"
   },
   "best_params": {
-    "colsample_bytree": 0.5438257335919587,
-    "gamma": 0.15080370696865844,
-    "learning_rate": 0.04389926283749712,
-    "max_depth": 8,
-    "min_child_weight": 1,
-    "n_estimators": 484,
-    "reg_alpha": 0.11978094533348621,
-    "reg_lambda": 0.7173423081368346,
-    "subsample": 0.8468358280832688
+    "colsample_bytree": 0.4941119497105263,
+    "gamma": 0.11180606012821478,
+    "learning_rate": 0.1365666960385575,
+    "max_depth": 9,
+    "min_child_weight": 2,
+    "n_estimators": 422,
+    "reg_alpha": 0.2850305850446825,
+    "reg_lambda": 0.6457647406561529,
+    "subsample": 0.8845021680097509
   },
-  "test_accuracy": 0.9975,
-  "test_f1_macro": 0.9975010327090096,
+  "test_accuracy": 0.9966666666666667,
+  "test_f1_macro": 0.9966672701924769,
   "feature_descriptions": {
+    "age": {
+      "positive": "age ({} yrs)",
+      "negative": "age ({} yrs)"
+    },
+    "fitness_level": {
+      "positive": "fitness level ({})",
+      "negative": "fitness level ({})"
+    },
+    "athlete_type": {
+      "positive": "athlete type ({})",
+      "negative": "athlete type ({})"
+    },
+    "body_fat_pct": {
+      "positive": "body fat ({:.1f}%)",
+      "negative": "body fat ({:.1f}%)"
+    },
+    "limb_length": {
+      "positive": "limb length ({})",
+      "negative": "limb length ({})"
+    },
     "duration_mins": {
       "positive": "long session duration ({:.0f} min)",
       "negative": "short session duration ({:.0f} min)"
